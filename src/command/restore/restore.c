@@ -836,6 +836,10 @@ restoreCleanOwnership(
     // Update ownership if not as expected
     if (actualUserId != expectedUserId || actualGroupId != expectedGroupId)
     {
+        LOG_INFO_FMT("actualUserId '%s'", strZ(actualUserId));
+        LOG_INFO_FMT("expectedUserId '%s'", strZ(expectedUserId));
+        LOG_INFO_FMT("actualGroupId '%s'", strZ(actualGroupId));
+        LOG_INFO_FMT("expectedGroupId '%s'", strZ(expectedGroupId));
         // If this is a newly created file/link/path then there's no need to log updated permissions
         if (!new)
             LOG_DETAIL_FMT("update ownership for '%s'", strZ(pgPath));

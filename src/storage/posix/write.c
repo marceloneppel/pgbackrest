@@ -108,19 +108,27 @@ storageWritePosixOpen(THIS_VOID)
     // Update user/group owner
     if (this->interface.user != NULL || this->interface.group != NULL)
     {
+        LOG_INFO_FMT("this->interface.user '%s'", strZ(this->interface.user));
+        LOG_INFO_FMT("this->interface.group '%s'", strZ(this->interface.group));
         uid_t updateUserId = userIdFromName(this->interface.user);
+//        LOG_INFO_FMT("updateUserId '%s'", strZ(updateUserId));
+//        LOG_INFO_FMT("userId() '%s'", strZ(userId()));
 
         if (updateUserId == userId())
             updateUserId = (uid_t)-1;
+//        LOG_INFO_FMT("updateUserId 2 '%s'", strZ(updateUserId));
 
         gid_t updateGroupId = groupIdFromName(this->interface.group);
+//        LOG_INFO_FMT("updateGroupId '%s'", strZ(updateGroupId));
+//        LOG_INFO_FMT("groupId() '%s'", strZ(groupId()));
 
         if (updateGroupId == groupId())
             updateGroupId = (gid_t)-1;
+//        LOG_INFO_FMT("updateGroupId '%s'", strZ(updateGroupId));
 
-        THROW_ON_SYS_ERROR_FMT(
-            chown(strZ(this->nameTmp), updateUserId, updateGroupId) == -1, FileOwnerError, "unable to set ownership for '%s'",
-            strZ(this->nameTmp));
+//        THROW_ON_SYS_ERROR_FMT(
+//            chown(strZ(this->nameTmp), updateUserId, updateGroupId) == -1, FileOwnerError, "unable to set ownership for '%s'",
+//            strZ(this->nameTmp));
     }
 
     FUNCTION_LOG_RETURN_VOID();
