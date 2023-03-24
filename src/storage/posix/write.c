@@ -105,22 +105,25 @@ storageWritePosixOpen(THIS_VOID)
     // Set free callback to ensure the file descriptor is freed
     memContextCallbackSet(objMemContext(this), storageWritePosixFreeResource, this);
 
-    // Update user/group owner
+    // Update user/group owner if needed.
     if (this->interface.user != NULL || this->interface.group != NULL)
     {
         uid_t updateUserId = userIdFromName(this->interface.user);
 
-        if (updateUserId == userId())
-            updateUserId = (uid_t)-1;
-
         gid_t updateGroupId = groupIdFromName(this->interface.group);
 
-        if (updateGroupId == groupId())
-            updateGroupId = (gid_t)-1;
+        if (updateUserId != userId() || updateGroupId != groupId())
+        {
+            if (updateUserId == userId())
+                updateUserId = (uid_t)-1;
 
-        THROW_ON_SYS_ERROR_FMT(
-            chown(strZ(this->nameTmp), updateUserId, updateGroupId) == -1, FileOwnerError, "unable to set ownership for '%s'",
-            strZ(this->nameTmp));
+            if (updateGroupId == groupId())
+                updateGroupId = (gid_t)-1;
+
+            THROW_ON_SYS_ERROR_FMT(
+                    chown(strZ(this->nameTmp), updateUserId, updateGroupId) == -1, FileOwnerError, "unable to set ownership for '%s'",
+                    strZ(this->nameTmp));
+        }
     }
 
     FUNCTION_LOG_RETURN_VOID();
