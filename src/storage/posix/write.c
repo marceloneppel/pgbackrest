@@ -108,22 +108,25 @@ storageWritePosixOpen(THIS_VOID)
     // Update user/group owner
     if (this->interface.user != NULL || this->interface.group != NULL)
     {
+        LOG_INFO_FMT("this->nameTmp '%s'", strZ(this->nameTmp));
         LOG_INFO_FMT("this->interface.user '%s'", strZ(this->interface.user));
         LOG_INFO_FMT("this->interface.group '%s'", strZ(this->interface.group));
         uid_t updateUserId = userIdFromName(this->interface.user);
 //        LOG_INFO_FMT("updateUserId '%s'", strZ(updateUserId));
-//        LOG_INFO_FMT("userId() '%s'", strZ(userId()));
+//        LOG_INFO_FMT(userId());
 
         if (updateUserId == userId())
             updateUserId = (uid_t)-1;
+            LOG_INFO_FMT("this->interface.user equal to userId()");
 //        LOG_INFO_FMT("updateUserId 2 '%s'", strZ(updateUserId));
 
         gid_t updateGroupId = groupIdFromName(this->interface.group);
 //        LOG_INFO_FMT("updateGroupId '%s'", strZ(updateGroupId));
-//        LOG_INFO_FMT("groupId() '%s'", strZ(groupId()));
+//        LOG_INFO_FMT(groupId());
 
         if (updateGroupId == groupId())
             updateGroupId = (gid_t)-1;
+            LOG_INFO_FMT("this->interface.group equal to groupId()");
 //        LOG_INFO_FMT("updateGroupId '%s'", strZ(updateGroupId));
 
 //        THROW_ON_SYS_ERROR_FMT(
